@@ -1,6 +1,6 @@
+import 'package:deep_observer/deep_observer.dart';
 import 'package:example/my_deep_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:deep_observer/deep_observer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalInjector(
+    return DeepGlobalInjector(
       registrations: [() => MyDeepProvider()],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    MyDeepProvider provider = DependencyProvider.get<MyDeepProvider>(context);
+    MyDeepProvider provider = context.deepGet<MyDeepProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Builder(
               builder: (context) {
                 return Text(
-                  '${provider.counter.value(context)}',
+                  '${provider.counter.reactiveValue(context)}',
                   style: Theme.of(context).textTheme.headlineMedium,
                 );
               },
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          int currentValue = provider.counter.valueNoReactive;
+          int currentValue = provider.counter.value;
           provider.counter.set(currentValue + 1);
         },
         tooltip: 'Increment',

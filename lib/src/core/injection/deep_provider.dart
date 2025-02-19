@@ -1,10 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-class DependencyProvider extends InheritedWidget {
+class DeepProvider extends InheritedWidget {
   final Map<Type, dynamic> dependencies;
 
-  const DependencyProvider({
+  const DeepProvider({
     super.key,
     required this.dependencies,
     required super.child,
@@ -12,7 +11,7 @@ class DependencyProvider extends InheritedWidget {
 
   static T get<T>(BuildContext context) {
     final provider =
-        context.dependOnInheritedWidgetOfExactType<DependencyProvider>();
+        context.dependOnInheritedWidgetOfExactType<DeepProvider>();
     final dependency = provider?.dependencies[T];
     if (dependency == null) {
       throw Exception("Dependencia no registrada para el tipo: $T");
@@ -22,7 +21,6 @@ class DependencyProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return !const MapEquality()
-        .equals(dependencies, (oldWidget as DependencyProvider).dependencies);
+    return false;
   }
 }

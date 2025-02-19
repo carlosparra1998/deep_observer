@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class LocalInjector<T> extends StatelessWidget {
+class DeepLocalInjector<T> extends StatelessWidget {
   final T Function() registration;
   final Widget Function(BuildContext context, T provider) builder;
 
-  const LocalInjector({
+  const DeepLocalInjector({
     super.key,
     required this.registration,
     required this.builder,
