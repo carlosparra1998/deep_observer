@@ -18,5 +18,5 @@ library;
 export 'src/deep_observable.dart';
 export 'src/core/injection/global_injector.dart';
 export 'src/core/injection/local_injector.dart';
-export 'src/core/injection/deep_updater.dart';
+export 'src/core/injection/deep_updatable.dart';
 export 'src/core/extensions/context.dart';
