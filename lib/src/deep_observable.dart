@@ -2,25 +2,25 @@ import 'package:deep_observer/src/core/tracking/deep_context_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-  /// Creates a new instance of the Uuid class.
-  /// Optionally you can pass in a [GlobalOptions] object to set global options
-  /// for all UUID generation.
-  /// [GlobalOptions.rng] is a [RNG] class that returns a list of random bytes.
-  ///
-  /// Defaults rng function is `UuidUtil.cryptoRNG`
-  ///
-  /// Example: Using MathRNG globally
-  ///
-  /// ```dart
-  /// var uuid = Uuid(options: {
-  ///   'grng': UuidUtil.mathRNG
-  /// })
-  ///
-  /// // Generate a v4 (random) id that will use cryptRNG for its rng function
-  /// uuid.v4();
-  /// ```
+/// Creates a new instance of the Uuid class.
+/// Optionally you can pass in a [GlobalOptions] object to set global options
+/// for all UUID generation.
+/// [GlobalOptions.rng] is a [RNG] class that returns a list of random bytes.
+///
+/// Defaults rng function is `UuidUtil.cryptoRNG`
+///
+/// Example: Using MathRNG globally
+///
+/// ```dart
+/// var uuid = Uuid(options: {
+///   'grng': UuidUtil.mathRNG
+/// })
+///
+/// // Generate a v4 (random) id that will use cryptRNG for its rng function
+/// uuid.v4();
+/// ```
 class DeepObservable<T> {
-  final String _uuid = const Uuid().v4();
+  late final String _uuid;
 
   bool _lockReactivity = false;
 
@@ -39,6 +39,7 @@ class DeepObservable<T> {
 
   DeepObservable(this._value) {
     _defaultValue = _value;
+    _uuid = const Uuid().v4();
   }
 
   void set(T value) {
