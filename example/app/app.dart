@@ -1,6 +1,6 @@
 import 'package:deep_observer/deep_observer.dart';
-import 'package:example/app/controllers/counter_provider.dart';
-import 'package:example/app/views/home_view.dart';
+import 'controllers/counter_provider.dart';
+import 'views/home_view.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {

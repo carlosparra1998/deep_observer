@@ -1,6 +1,6 @@
 import 'package:deep_observer/deep_observer.dart';
-import 'package:example/app/controllers/counter_provider.dart';
-import 'package:example/app/widgets/row_counter.dart';
+import '../controllers/counter_provider.dart';
+import '../widgets/row_counter.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {

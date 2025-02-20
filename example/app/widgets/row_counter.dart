@@ -1,6 +1,6 @@
 import 'package:deep_observer/deep_observer.dart';
-import 'package:example/app/controllers/counter_provider.dart';
-import 'package:example/app/widgets/icon_button.dart';
+import '../controllers/counter_provider.dart';
+import 'icon_button.dart';
 import 'package:flutter/material.dart';
 
 class MyRowCounter extends StatefulWidget {
