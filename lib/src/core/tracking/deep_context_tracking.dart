@@ -12,7 +12,7 @@ class DeepContextTracking {
     _updateContexts(updateContexts.toSet());
   }
 
-  static void registerDependency(
+  static void registerDependencies(
     BuildContext context,
     List<DeepObservable> observables,
   ) {

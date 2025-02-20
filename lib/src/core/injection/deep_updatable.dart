@@ -14,7 +14,7 @@ class DeepUpdatable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeepContextTracking.registerDependency(context, registrations);
+    DeepContextTracking.registerDependencies(context, registrations);
     return Function.apply(
       builder,
       [context, ...registrations.map((e) => e.value)],

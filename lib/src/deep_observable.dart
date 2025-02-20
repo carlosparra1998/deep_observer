@@ -31,7 +31,7 @@ class DeepObservable<T> {
   T get value => _value;
 
   T reactiveValue(BuildContext context) {
-    DeepContextTracking.registerDependency(context, [this]);
+    DeepContextTracking.registerDependencies(context, [this]);
     return _value;
   }
 
