@@ -42,25 +42,4 @@ class DeepContextTracking {
       }
     }
   }
-
-  static void _updateContextsCacheSystem(Set<BuildContext> updateContexts) {
-    Set<BuildContext> ancestorsCache = {};
-    for (var context in updateContexts) {
-      bool update = true;
-      context.visitAncestorElements(
-        (ancestor) {
-          if (ancestorsCache.contains(ancestor) ||
-              updateContexts.contains(ancestor)) {
-            update = false;
-            return false;
-          }
-          ancestorsCache.add(ancestor);
-          return true;
-        },
-      );
-      if (update) {
-        (context as Element).markNeedsBuild();
-      }
-    }
-  }
 }
