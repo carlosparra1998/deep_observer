@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeepGlobalInjector(
+    return GlobalInjector(
       registrations: [() => MyCounterProvider()],
       child: MaterialApp(
         title: 'Flutter Demo',

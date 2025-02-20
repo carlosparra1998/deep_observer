@@ -1,11 +1,11 @@
 import 'package:deep_observer/src/core/injection/deep_provider.dart';
 import 'package:flutter/material.dart';
 
-class DeepGlobalInjector<T> extends StatelessWidget {
+class GlobalInjector<T> extends StatelessWidget {
   final List<T Function()> registrations;
   final Widget child;
 
-  const DeepGlobalInjector({
+  const GlobalInjector({
     super.key,
     required this.registrations,
     required this.child,
