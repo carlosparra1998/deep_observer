@@ -1,18 +1,17 @@
 /// # Deep Observer
 /// 
-/// Librería para manejo de estados reactivos en Flutter de forma eficiente.
+//// Library for efficient handling of reactive states in Flutter.
 /// 
-/// ## Descripción
-/// Permite la gestión des estados de manera eficiente mediante un sistema de
-/// observables y dependencias basado en `BuildContext`.
+/// ## Description
+/// Allows for efficient state management through a system of observables and dependencies based on `BuildContext`.
 /// 
-/// ## Autor
-/// Desarrollado por Carlos Francisco Parra García
+/// ## Author
+/// Developed by Carlos Francisco Parra García
 /// 
-/// ## Licencia
-/// MIT License - Ver el archivo LICENSE para más detalles.
+/// ## License
+/// MIT License - See the LICENSE file for more details.
 /// 
-/// © 2025 Carlos Francisco Parra García. Todos los derechos reservados.
+/// © 2025 Carlos Francisco Parra García. All rights reserved.
 /// 
 /// GitHub: https://github.com/carlosparra1998?tab=repositories
 /// 

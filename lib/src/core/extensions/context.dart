@@ -1,22 +1,22 @@
 import 'package:deep_observer/src/core/injection/deep_provider.dart';
 import 'package:flutter/material.dart';
 
-/// Esta extensión [DeepContext] facilitará métodos para la gestión de las instancias de las clases provider.
+/// This extension [DeepContext] will provide methods for managing instances of the provider classes.
 extension DeepContext on BuildContext {
 
-  /// Podrás obtener la instancia de tu clase provider mediante el árbol de `context`.
+  /// You will be able to get the instance of your provider class through the `context` tree.
   /// 
-  /// Solo en el caso de que esté instanciado por [LocalInjector] o [GlobalInjector].
+  /// Only in case it is instantiated by [LocalInjector] or [GlobalInjector].
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// context.deepGet<MyProvider>();
   /// ```
   /// 
-  /// Es la misma operación:
+  /// It is the same operation:
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// DeepProvider.get<MyProvider>(context);
   /// ```
   T deepGet<T>() {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// Este [Widget] [LocalInjector] permitirá crear instancias únicas de tu clase provider dentro del `context` generado.
+/// This [Widget] [LocalInjector] will allow you to create unique instances of your provider class within the generated `context`.
 class LocalInjector<T> extends StatelessWidget {
 
-  /// Este parámetro deberá contener la creación de la instancia de la clase provider.
+  /// This parameter must contain the creation of the provider class instance.
   final T Function() registration;
 
-  /// En este parámetro se construye el [Widget] con la instancia creada.
+  /// In this parameter the [Widget] is built with the instance created.
   final Widget Function(BuildContext context, T provider) builder;
 
-  /// Constructor de [LocalInjector].
+  /// [LocalInjector] constructor.
   const LocalInjector({
     super.key,
     required this.registration,

@@ -1,25 +1,25 @@
 import 'package:deep_observer/src/core/injection/deep_provider.dart';
 import 'package:flutter/material.dart';
 
-/// Este [Widget] [GlobalInjector] permitirá crear instancias únicas de tus clases provider en toda la app.
+/// This [Widget] [GlobalInjector] will allow you to create unique instances of your provider classes throughout the app.
 /// 
-/// Lo recomendable es que este [Widget] envuelva a [MaterialApp].
+/// It is recommended that this [Widget] should wrap [MaterialApp].
 class GlobalInjector<T> extends StatelessWidget {
 
-  /// Este parámetro deberá contener la creación de cada instancia a utilizar de las clases provider.
+  /// This parameter must contain the creation of each instance of the provider classes to be used.
   final List<T Function()> registrations;
 
-  /// En este parámetro se incluirá el [Widget] hijo.
+  /// The child [Widget] will be included in this parameter.
   final Widget child;
 
-  /// Constructor de [GlobalInjector].
+  /// [GlobalInjector] constructor.
   const GlobalInjector({
     super.key,
     required this.registrations,
     required this.child,
   });
 
-  /// En este parámetro se incluirán todas las dependencias creadas, indicadas en `registrations`.
+  /// This parameter will include all the dependencies created, indicated in `registrations`.
   static final Map<Type, dynamic> _dependencies = {};
 
   @override

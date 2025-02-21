@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 
-/// Este [Widget] [DeepProvider] controlará todas las instancias únicas de las clases provider.
+/// This [Widget] [DeepProvider] will control all unique instances of the provider classes.
 class DeepProvider extends InheritedWidget {
 
-  /// Todas las instancias de las clases provider indicadas en [LocalInjector] o [GlobalInjector].
+  /// All instances of the provider classes indicated in [LocalInjector] or [GlobalInjector].
   final Map<Type, dynamic> _dependencies;
 
-  /// Constructor de [DeepProvider].
+  /// [DeepProvider] constructor.
   const DeepProvider({
     super.key,
     required Map<Type, dynamic> dependencies,
     required super.child,
   }) : _dependencies = dependencies;
 
-  /// Podrás obtener la instancia de tu clase provider mediante el árbol de `context`.
+  /// You will be able to get the instance of your provider class through the `context` tree.
   /// 
-  /// Solo en el caso de que esté instanciado por [LocalInjector] o [GlobalInjector].
+  /// Only in case it is instantiated by [LocalInjector] or [GlobalInjector].
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// DeepProvider.get<MyProvider>(context);
   /// ```
   /// 
-  /// Es la misma operación:
+  /// It is the same operation:
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// context.deepGet<MyProvider>();
   /// ```
   static T get<T>(BuildContext context) {

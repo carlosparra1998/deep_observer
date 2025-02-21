@@ -2,93 +2,92 @@ import 'package:deep_observer/src/core/tracking/deep_context_tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-/// Creas una nueva instancia de la clase [DeepObservable].
-/// Esta variable contendrá unas propiedades que permitirán gestionar sencillamente la reactividad en tu código.
+/// You create a new instance of the [DeepObservable] class.
+/// This instance will contain properties that allow you to easily manage reactivity in your code.
 /// 
-/// Podrás elegir cualquier tipo de variable.
+/// You can choose any type of data.
 ///
 /// ```dart
-/// //Ejemplo
+/// //Example
 /// DeepObservable<double> myObservable = DeepObservable(0.0);
 /// ```
 /// 
-/// Podrás acceder a estos observables desde cualquier parte.
+/// You will be able to access these observables from anywhere.
 /// 
 /// ```dart
-/// //Ejemplo
+/// //Example
 /// YourProvider provider = context.deepObs<YourProvider>();
 /// ```
 /// 
-/// Podrás obtener el valor directo del observable.
+/// You will be able to obtain the direct value of the observable.
 /// 
 /// ```dart
-/// //Ejemplo
+/// //Example
 /// double myValue = provider.myObservable.value;
 /// ```
 /// 
-/// También podrás obtener el valor reactivo del mismo. 
-/// Esto permitirá actualizar automáticamente los [Widget] que solamente contengan ese `context` en caso de que aparezcan cambios en el observable,
-/// esto sin necesidad de indicarlo explícitamente con un [Wrap] como [Consumer]. 
+/// This will allow to automatically update the [Widget] containing only that `context` in case of changes in the observable, 
+/// without the need to explicitly indicate it with a [Wrap] like [Consumer].
 /// 
-/// Al renderizar solamente los [Widget] afectados por ese `context`, 
-/// se incrementa la eficiencia en la gestión de estados. La suscripción a los cambios es implícita.
+/// By rendering only the [Widget] affected by that `context`, 
+/// efficiency in the management of states is increased. Subscription to changes is implicit.
 /// 
 /// ```dart
-/// //Ejemplo
+/// //Example
 /// double myValue = provider.myObservable.reactiveValue(context);
 /// ```
 /// 
-/// Podrás forzar una actualización del mismo en cualquier momento.
+/// You will be able to force an update at any time.
 /// 
 /// ```dart
-/// //Ejemplo
+/// //Example
 /// provider.myObservable.update();
 /// ```
 class DeepObservable<T> {
 
-  /// Identificador de la instancia [DeepObservable].
+  /// Identifier of the [DeepObservable] instance.
   late final String _uuid;
 
-  /// Controlará la reactividad de la instancia [DeepObservable].
+  /// Will control the reactivity of the [DeepObservable] instance.
   bool _lockReactivity = false;
 
-  ///Valor actual de la instancia [DeepObservable].
+  /// Current value of the [DeepObservable] instance.
   T _value;
 
-  ///Valor inicial de la instancia [DeepObservable].
+  /// Initial value of the [DeepObservable] instance.
   late T _defaultValue;
 
-  /// Podrás elegir este método de reactividad, esto evitará renderizados de Widgets innecesarios. Siendo así todavía más eficiente la gestión de estados.
+  /// You can choose this reactivity method, this will avoid unnecessary widget renderings. This will make the state management even more efficient.
   /// 
-  /// Por defecto, este valor estará a `false`.
+  /// By default, this value will be set to `false`.
   /// 
-  /// PRECAUCIÓN: Si se utiliza este modo, evitar utilizar el modificador `const` en los [Widget] que contengan internamente declaraciones a `reactiveValue(context)` o al [Widget] `DeepUpdatable`. 
-  /// En caso contrario, no se recibirán actualizaciones de los observables dentro de ese [Widget] con `const`.
+  /// CAUTION: If this mode is used, avoid using the `const` modifier on [Widget] containing internally declarations to `reactiveValue(context)` or 
+  /// to the [Widget] `DeepUpdatable`. Otherwise, you will not receive updates to observables within that [Widget] with `const`.
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// DeepObservable<double> myObservable = DeepObservable(0.0, efficiencyMode: true);
   /// ```
   final bool efficiencyMode;
 
-  /// Podrás obtener el valor directo del observable.
+  /// You will be able to obtain the direct value of the observable.
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// double myValue = provider.myObservable.value;
   /// ```
   T get value => _value;
 
-  /// Podrás obtener el valor reactivo del mismo.
+  /// You will be able to obtain its reactive value.
   /// 
-  /// Esto permitirá actualizar automáticamente los [Widget] que solamente contengan ese `context` en caso de que aparezcan cambios en el observable,
-  /// esto sin necesidad de indicarlo explícitamente con un [Wrap]. 
+  /// This will allow to automatically update the [Widget] containing only that `context` in case of changes in the observable, 
+  /// without the need to explicitly indicate it with a [Wrap]. 
   /// 
-  /// Al renderizar solamente los [Widget] afectados por ese `context`, 
-  /// se incrementa la eficiencia en la gestión de estados. La suscripción a los cambios es implícita.
+  /// By rendering only the [Widget] affected by that `context`, 
+  /// efficiency in the management of states is increased. Subscription to changes is implicit.
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// double myValue = provider.myObservable.reactiveValue(context);
   /// ```
   T reactiveValue(BuildContext context) {
@@ -96,12 +95,12 @@ class DeepObservable<T> {
     return _value;
   }
 
-  /// Podrás modificar el valor del observable en cualquier momento.
+  /// You can change the value of the observable at any time.
   /// 
-  /// Automáticamente se actualizarán los `context` implicados.
+  /// The `context` involved will be automatically updated.
   ///
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// provider.myObservable.value = 25.5;
   /// ```  
   set value(T value) => set(value);
@@ -112,12 +111,12 @@ class DeepObservable<T> {
     _uuid = const Uuid().v4();
   }
 
-  /// Podrás modificar el valor del observable en cualquier momento.
+  /// You can change the value of the observable at any time.
   /// 
-  /// Automáticamente se actualizarán los `context` implicados.
+  /// The `context` involved will be automatically updated.
   ///
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// provider.myObservable.set(25.5);
   /// ```  
   void set(T value) {
@@ -129,10 +128,10 @@ class DeepObservable<T> {
 
   /// Podrás regresar al valor original del observable. 
   /// 
-  /// Automáticamente se actualizarán los `context` implicados.
+  /// The `context` involved will be automatically updated.
   /// 
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// DeepObservable<double> myObservable = DeepObservable(10.0);
   /// 
   /// myObservable.set(25.5);
@@ -150,10 +149,10 @@ class DeepObservable<T> {
     }
   }
 
-  /// Podrás forzar la actualización los `context` implicados.
+  /// You will be able to force the update of the `context` involved.
   ///
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// provider.myObservable.update();
   /// ```  
   void update() {
@@ -162,31 +161,31 @@ class DeepObservable<T> {
     }
   }
 
-  /// Podrás bloquear la reactividad del observable.
+  /// You will be able to block the reactivity of the observable.
   /// 
-  /// No se actualizarán los `context` implicados.
+  /// The `context` involved will not be updated.
   ///
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// provider.myObservable.lockReactivity();
   /// ```  
   void lockReactivity() {
     _lockReactivity = true;
   }
 
-  /// Podrás desbloquearán la reactividad del observable.
+  /// You will be able to unlock the reactivity of the observable.
   /// 
-  /// Se podrán actualizarán los `context` implicados.
+  /// The `context` involved can be updated.
   ///
   /// ```dart
-  /// //Ejemplo
+  /// //Example
   /// provider.myObservable.unlockReactivity();
   /// ```  
   void unlockReactivity() {
     _lockReactivity = false;
   }
 
-  ///Operador `==` para las instancias de [DeepObservable].
+  /// Operator `==` for [DeepObservable] instances.
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -194,7 +193,7 @@ class DeepObservable<T> {
           runtimeType == other.runtimeType &&
           _uuid == other._uuid);
 
-  ///HashCode de las instancias de [DeepObservable].
+  /// HashCode of [DeepObservable] instances.
   @override
   int get hashCode => _uuid.hashCode;
 }

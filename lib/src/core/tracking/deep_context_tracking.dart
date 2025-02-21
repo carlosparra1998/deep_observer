@@ -1,13 +1,13 @@
 import 'package:deep_observer/src/deep_observable.dart';
 import 'package:flutter/material.dart';
 
-/// Clase privada que gestiona la reactividad de los observables creados en toda la app.
+/// Private class that manages the reactivity of the observables created throughout the app.
 class DeepContextTracking {
 
-  /// Variable [Map] que contiene los observables por cada `context`.
+  /// [Map] variable containing the observables for each `context`.
   static final Map<BuildContext, Set<DeepObservable>> _dependencies = {};
 
-  /// Actualizará los `context` dado un [DeepObservable].
+  /// It will update the `context` given a [DeepObservable].
   static void updateDependency(DeepObservable observable) {
     _clean();
     List<BuildContext> updateContexts =
@@ -17,7 +17,7 @@ class DeepContextTracking {
     _updateContexts(updateContexts.toSet(), observable.efficiencyMode);
   }
 
-  /// Registrará el [DeepObservable] en las dependencias reactivas dado el `context`.
+  /// It will register the [DeepObservable] in the reactive dependencies given the `context`.
   static void registerDependencies(
     BuildContext context,
     List<DeepObservable> observables,
@@ -27,12 +27,12 @@ class DeepContextTracking {
     _dependencies[context]?.addAll(observables);
   }
 
-  /// Eliminará aquellos `context` que han sido desmontados.
+  /// It will remove those `contexts` that have been disassembled.
   static void _clean() {
     _dependencies.removeWhere((ctx, _) => !(ctx as Element).mounted);
   }
 
-  /// Algoritmo para actualizar eficientemente los `context` que corresponden.
+  /// Algorithm to efficiently update the corresponding `context`.
   static void _updateContexts(
     Set<BuildContext> updateContexts,
     bool efficiencyMode,
