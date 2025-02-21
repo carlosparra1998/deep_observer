@@ -3,7 +3,7 @@ import 'package:deep_observer/deep_observer.dart';
 class MyCounterProvider {
   List<DeepObservable<int>> counters = List.generate(
     5,
-    (_) => DeepObservable(0),
+    (_) => DeepObservable(0, efficiencyMode: true),
   );
 
   DeepObservable<int>? counter(int position) =>
