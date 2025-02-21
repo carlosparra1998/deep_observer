@@ -6,7 +6,7 @@
 /// Allows for efficient state management through a system of observables and dependencies based on `BuildContext`.
 /// 
 /// ## Author
-/// Developed by Carlos Francisco Parra García
+/// Developed by Carlos Francisco Parra García.
 /// 
 /// ## License
 /// MIT License - See the LICENSE file for more details.
