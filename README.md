@@ -1,21 +1,13 @@
 # Deep Observer
 [<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="200" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
 
-A wrapper around [InheritedWidget]
-to make them easier to use and more reusable.
+Librería que permite una gestión sencilla, y eficiente de los estados de la aplicación.
 
-By using `provider` instead of manually writing [InheritedWidget], you get:
+Utilizando `Deep Observable` podrás:
 
-- simplified allocation/disposal of resources
-- lazy-loading
-- a vastly reduced boilerplate over making a new class every time
-- devtool friendly – using Provider, the state of your application will be visible in the Flutter devtool
-- a common way to consume these [InheritedWidget]s (See [Provider.of]/[Consumer]/[Selector])
-- increased scalability for classes with a listening mechanism that grows exponentially
-  in complexity (such as [ChangeNotifier], which is O(N) for dispatching notifications).
-
-To read more about a `provider`, see its [documentation](https://pub.dev/documentation/provider/latest/provider/provider-library.html).
-
+- Manejar la reactividad de tu aplicación de forma sencilla.
+- **Gestión implícita**, la cual te permite manejar la reactividad a partir de las propias variables, sin necesidad de incluir Wraps innecesarios en tu código.
+- **Modo eficiencia** (Experimental), en donde se realizarán los renderizados mínimos necesarios para controlar la reactividad, evitando actualizaciones recurrentes e innecesarias.
 
 ## Usage
 
@@ -25,9 +17,9 @@ Vamos a ver los pasos detallados para el uso adecuado de Deep Observer.
 
 ### Paso 1. Creación de Observers.
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Lo primero será crear una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
 
-Una vez creado, podemos declarar variables de tipo `DeepObservable` para que estas tengan las propiedades necesarias para la reactividad.
+Una vez creado, podemos declarar variables de tipo `DeepObservable`, estas contendrán las propiedades necesarias para la reactividad.
 
 Se debe indicar el tipo de dato a manejar, y el valor que tendrá inicialmente.
 
@@ -46,22 +38,29 @@ class HomeController{
 
 ### Paso 2. Inyección de dependencias
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Para usar tus clases `provider` con variables `DeepObservable` adecuadamente, se deberá realizar previamente una inyección de dependencias. Se pueden realizar de dos maneras diferentes.
 
 #### Método 1. Inyección global
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Para realizar una inyeción de dependencias global, lo ideal será envolver `MaterialApp` con `GlobalInjector`, indicando en *registrations* las clases `provider` a utilizar. Estarán disponibles desde cualquier punto de la aplicación.
 
 ```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-void main() => runApp(CounterApp());
-class CounterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => CounterCubit(),
-        child: CounterPage(),
+    return GlobalInjector(
+      registrations: [
+        () => MyCounterProvider(),
+        () => LoginProvider(),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        home: const HomeView(),
       ),
     );
   }
@@ -70,17 +69,27 @@ class CounterApp extends StatelessWidget {
 
 #### Método 2. Inyección local
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Para realizar una inyeción de dependencias local, simplemente se envuelve cualquier Widget con `LocalInjector`, indicando en *registration* la clase `provider` a utilizar. Estará solamente para los Widget hijos de `LocalInjector`.
 
 ```dart
-void main() => runApp(CounterApp());
-class CounterApp extends StatelessWidget {
+class _MyRowCounterState extends State<MyRowCounter> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => CounterCubit(),
-        child: CounterPage(),
+    return LocalInjector(
+      registration: () => MyCounterProvider(),
+      builder: (BuildContext context, MyCounterProvider provider) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Counter ${provider.counter.value}:',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -91,42 +100,125 @@ class CounterApp extends StatelessWidget {
 
 ### Paso 3. Gestión de estados
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+En este punto se va a detallar como gestionar la reactividad con todo lo anterior establecido. Para ello podemos utilizar dos métodos.
 
-#### Método 1. Gestión implícita
+#### Método 1. Gestión implícita (Deep gesture) **{NUEVO}**
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Lo primero que debemos hacer es obtener la instancia de nuestra clase `provider`.
+
+Podemos hacerlo con el método `context.deepGet<MyCounterProvider>()`. 
+
+En caso de haber realizado una inyección local de dependencias, podemos obtener la instancia del `builder` de `LocalInjector`. 
+
+(TEST ESTO ?????)
+
+Para la gestión implícita, basta con obtener el valor deseado del `DeepObservable` mediante `observable.reactiveValue(context)`.
+
+Con esto, el `context` pasado por parámetro se suscribirá automáticamente a los cambios del `DeepObservable`. En caso de haber algún cambio, o actualización, solo se renderizarán los Widgets que estén dentro del árbol generado por ese `context`.
 
 ```dart
 
-void main() => runApp(CounterApp());
-class CounterApp extends StatelessWidget {
+class _MyRowCounterState extends State<MyRowCounter> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => CounterCubit(),
-        child: CounterPage(),
+    MyCounterProvider provider = context.deepGet<MyCounterProvider>();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Counter ${widget.identifier + 1}:',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+              ),
+              Text(
+                '${widget.observable.reactiveValue(context)}', //DEEP GESTURE
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+              ),
+              MyIconButton(
+                Icons.add,
+                onTap: () {
+                  provider.incrementCounter(widget.identifier);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
 ```
 
-#### Método 2. Gestión explícita
+#### Método 2. Gestión explícita (Gestión clásica) 
 
-Lo primero será declarar en una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+Al igual que en la gestión implícita, Lo primero que debemos hacer es obtener la instancia de nuestra clase `provider`.
+
+Podemos hacerlo con el método `context.deepGet<MyCounterProvider>()`. 
+
+En caso de haber realizado una inyección local de dependencias, podemos obtener la instancia del `builder` de `LocalInjector`. Pero el Widget `DeepUpdatable` debe estar obligatoriamente dentro del árbol de `LocalInjector` en este caso.
+
+(TEST ESTO ?????)
+
+Para la gestión explícita, debemos de envolver los Widgets con `DeepUpdatable`. En *registrations* podemos indicar un número cualquiera de clases `provider`. El builder contendrá (N + 1) parámetros, siendo N el número de providers indicados en *registrations*. El primer parámetro será un `context`.
+
+El `context` generado por `DeepUpdatable` se suscribirá automáticamente a los cambios de los `DeepObservable`. En caso de haber algún cambio, o actualización, solo se renderizará, los Widgets que estén dentro del árbol generado por ese `context`.
 
 ```dart
-void main() => runApp(CounterApp());
-class CounterApp extends StatelessWidget {
+class _MyRowCounterState extends State<MyRowCounter> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => CounterCubit(),
-        child: CounterPage(),
-      ),
+    MyCounterProvider provider = context.deepGet<MyCounterProvider>();
+
+    return DeepUpdatable(  //EXPLICIT GESTURE
+      registrations: [provider.counter],
+      builder:
+          (BuildContext context, DeepObservable<int> counter) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Counter ${widget.identifier + 1}:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      '${widget.observable.value}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
+                    MyIconButton(
+                      Icons.add,
+                      onTap: () {
+                        provider.incrementCounter(widget.identifier);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
     );
   }
 }
@@ -134,37 +226,18 @@ class CounterApp extends StatelessWidget {
 
 ---
 
-## ANEXO 1. Modo eficiente
-
-**BlocBuilder** is a Flutter widget which requires a `bloc` and a `builder` function. `BlocBuilder` handles building the widget in response to new states. `BlocBuilder` is very similar to `StreamBuilder` but has a more simple API to reduce the amount of boilerplate code needed. The `builder` function will potentially be called many times and should be a [pure function](https://en.wikipedia.org/wiki/Pure_function) that returns a widget in response to the state.
-
-See `BlocListener` if you want to "do" anything in response to state changes such as navigation, showing a dialog, etc...
-
-If the `bloc` parameter is omitted, `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the current `BuildContext`.
-
+## ANEXO 1. Modo eficiencia (Experimental)
 ```dart
-BlocBuilder<BlocA, BlocAState>(
-  builder: (context, state) {
-    // return widget here based on BlocA's state
-  }
-)
+class HomeController{
+  HomeController();
+
+  DeepObservable<int> observableInt = DeepObservable(0, efficiencyMode: true);
+
+  DeepObservable<bool?> observableBool = DeepObservable(null, efficiencyMode: true);
+
+  DeepObservable<List<String>> observableList = DeepObservable(<String>[], efficiencyMode: true);
+}
 ```
-
-Only specify the bloc if you wish to provide a bloc that will be scoped to a single widget and isn't accessible via a parent `BlocProvider` and the current `BuildContext`.
-
-```dart
-BlocBuilder<BlocA, BlocAState>(
-  bloc: blocA, // provide the local bloc instance
-  builder: (context, state) {
-    // return widget here based on BlocA's state
-  }
-)
-```
-
-**MultiBlocProvider** is a Flutter widget that merges multiple `BlocProvider` widgets into one.
-`MultiBlocProvider` improves the readability and eliminates the need to nest multiple `BlocProviders`.
-By using `MultiBlocProvider` we can go from:
-
 ## Gallery
 
 <div style="text-align: center">
@@ -180,21 +253,11 @@ By using `MultiBlocProvider` we can go from:
                     <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_infinite_list.gif" width="200"/>
                 </a>
             </td>
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/flutter-login">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_firebase_login.gif" width="200" />
-                </a>
-            </td>
         </tr>
         <tr>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/github-search">
                     <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_github_search.gif" width="200"/>
-                </a>
-            </td>
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/flutter-weather">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_weather.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
@@ -208,28 +271,9 @@ By using `MultiBlocProvider` we can go from:
 
 ## Examples
 
-- [Counter](https://bloclibrary.dev/tutorials/flutter-counter) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
-- [Form Validation](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - an example of how to use the `bloc` and `flutter_bloc` packages to implement form validation.
-- [Bloc with Stream](https://github.com/felangel/bloc/tree/master/examples/flutter_bloc_with_stream) - an example of how to hook up a `bloc` to a `Stream` and update the UI in response to data from the `Stream`.
-- [Complex List](https://github.com/felangel/bloc/tree/master/examples/flutter_complex_list) - an example of how to manage a list of items and asynchronously delete items one at a time using `bloc` and `flutter_bloc`.
-- [Infinite List](https://bloclibrary.dev/tutorials/flutter-infinite-list) - an example of how to use the `bloc` and `flutter_bloc` packages to implement an infinite scrolling list.
-- [Login Flow](https://bloclibrary.dev/tutorials/flutter-login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a Login Flow.
-- [Firebase Login](https://bloclibrary.dev/tutorials/flutter-firebase-login) - an example of how to use the `bloc` and `flutter_bloc` packages to implement login via Firebase.
-- [Github Search](https://bloclibrary.dev/tutorials/github-search) - an example of how to create a Github Search Application using the `bloc` and `flutter_bloc` packages.
-- [Weather](https://bloclibrary.dev/tutorials/flutter-weather) - an example of how to create a Weather Application using the `bloc` and `flutter_bloc` packages. The app uses a `RefreshIndicator` to implement "pull-to-refresh" as well as dynamic theming.
-- [Todos](https://bloclibrary.dev/tutorials/flutter-todos) - an example of how to create a Todos Application using the `bloc` and `flutter_bloc` packages.
-- [Timer](https://bloclibrary.dev/tutorials/flutter-timer) - an example of how to create a Timer using the `bloc` and `flutter_bloc` packages.
-- [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - an example of how to create a Shopping Cart Application using the `bloc` and `flutter_bloc` packages based on [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
-- [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a dynamic form which pulls data from a repository.
-- [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - an example of how to build a multi-step wizard using the `bloc` and `flutter_bloc` packages.
-- [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesuarus app -- made for Bytconf Flutter 2020.
-- [I/O Photo Booth](https://github.com/flutter/photobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photo booth web app -- made for Google I/O 2021.
-- [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
-
-## Dart Versions
-
-- Dart 2: >= 2.14
+- [Multi Counter - Implicit Gesture](https://bloclibrary.dev/tutorials/flutter-counter) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
+- [Multi Counter - Explicit Gesture](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - an example of how to use the `bloc` and `flutter_bloc` packages to implement form validation.
 
 ## Maintainers
 
-- [Felix Angelov](https://github.com/felangel)
+- [Carlos Francisco Parra García](https://github.com/carlosparra1998)
