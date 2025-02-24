@@ -2,12 +2,11 @@ name: deep_observer
 description: Library for efficient handling of reactive states in Flutter.
 version: 1.0.0
 repository: https://github.com/carlosparra1998/deep_observer
-issue_tracker: https://github.com/ryanheise/just_audio/issues
+issue_tracker: https://github.com/carlosparra1998/deep_observer/issues
 topics:
-  - audio
-  - sound
-  - player
-  - background
+  - reactivity
+  - state-management
+  - provider
 
 environment:
   sdk: ^3.7.0
