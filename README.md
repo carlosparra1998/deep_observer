@@ -1,6 +1,6 @@
 # Deep Observer
 
-Library that allows a simple and efficient management of the application reactivity.
+Library that allows a simple and efficient management of the application reactivity in Flutter.
 
 Using `Deep Observable` you will be able to:
 
@@ -244,13 +244,13 @@ In case of updating any `DeepObservable` with these properties, what will be don
 
 IMPORTANT: For the reactivity to work with this property, you must not declare `Widgets` that use this type of reactivity with `const`.
 
-[<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/images/classic.png" width="500" />](Classic Mode)
+<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/images/classic.png" width="700" />
 
-[<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/images/efficiency.png" width="500" />](Efficiency Mode)
+<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/images/efficiency.png" width="700" />
 
 ## Gallery
 
-[<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/example.gif" width="500" />]
+<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/example.gif" width="250" />
 
 ## Examples
 
