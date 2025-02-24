@@ -3,15 +3,14 @@ import 'package:deep_observer/src/core/tracking/deep_context_tracking.dart';
 import 'package:flutter/material.dart';
 
 /// This [Widget] [DeepUpdatable] will allow you to control the reactivity of your observables explicitly.
-/// 
+///
 /// This class will replace the operation of:
-/// 
+///
 /// ```dart
 /// //Example
 /// myObservable.reactiveValue(context)
 /// ```
 class DeepUpdatable extends StatelessWidget {
-
   /// This parameter should contain a list of all the observables to be explicitly controlled.
   final List<DeepObservable> registrations;
 
@@ -28,9 +27,10 @@ class DeepUpdatable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DeepContextTracking.registerDependencies(context, registrations);
-    return Function.apply(
-      builder,
-      [context, ...registrations.map((e) => e.value)],
-    ) as Widget;
+    return Function.apply(builder, [
+          context,
+          ...registrations.map((e) => e.value),
+        ])
+        as Widget;
   }
 }

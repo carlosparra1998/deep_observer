@@ -2,10 +2,9 @@ import 'package:deep_observer/src/core/injection/deep_provider.dart';
 import 'package:flutter/material.dart';
 
 /// This [Widget] [GlobalInjector] will allow you to create unique instances of your provider classes throughout the app.
-/// 
+///
 /// It is recommended that this [Widget] should wrap [MaterialApp].
 class GlobalInjector<T> extends StatelessWidget {
-
   /// This parameter must contain the creation of each instance of the provider classes to be used.
   final List<T Function()> registrations;
 
@@ -31,9 +30,6 @@ class GlobalInjector<T> extends StatelessWidget {
       }
     }
 
-    return DeepProvider(
-      dependencies: _dependencies,
-      child: child,
-    );
+    return DeepProvider(dependencies: _dependencies, child: child);
   }
 }

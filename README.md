@@ -106,7 +106,7 @@ At this point we will detail how to manage the reactivity with all the above est
 
 The first thing we must do is to obtain the instance of our `provider` class.
 
-We can do it with the `context.deepGet<MyCounterProvider>()` method. 
+We can do it with the `context.deepGet<MyCounterProvider>()` method (Only if you are using `GlobalInjector`).
 
 In case we have performed a local dependency injection, we can get the `builder` instance from `LocalInjector`. 
 
@@ -161,7 +161,7 @@ class _MyRowCounterState extends State<MyRowCounter> {
 
 As in the implicit management, the first thing we must do is to obtain the instance of our `provider` class.
 
-We can do it with the `context.deepGet<MyCounterProvider>()` method. 
+We can do it with the `context.deepGet<MyCounterProvider>()` method (Only if you are using `GlobalInjector`).
 
 In case we have performed a local dependency injection, we can get the `builder` instance from `LocalInjector`. But the `DeepUpdatable` widget must necessarily be inside the `LocalInjector` tree in this case.
 

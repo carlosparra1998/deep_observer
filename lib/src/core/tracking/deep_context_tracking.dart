@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 /// Private class that manages the reactivity of the observables created throughout the app.
 class DeepContextTracking {
-
   /// [Map] variable containing the observables for each `context`.
   static final Map<BuildContext, Set<DeepObservable>> _dependencies = {};
 
