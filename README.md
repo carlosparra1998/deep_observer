@@ -1,27 +1,26 @@
 # Deep Observer
-[<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="200" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
 
-Librería que permite una gestión sencilla, y eficiente de los estados de la aplicación.
+Library that allows a simple and efficient management of the application reactivity.
 
-Utilizando `Deep Observable` podrás:
+Using `Deep Observable` you will be able to:
 
-- Manejar la reactividad de tu aplicación de forma sencilla.
-- **Gestión implícita**, la cual te permite manejar la reactividad a partir de las propias variables, sin necesidad de incluir Wraps innecesarios en tu código.
-- **Modo eficiencia** (Experimental), en donde se realizarán los renderizados mínimos necesarios para controlar la reactividad, evitando actualizaciones recurrentes e innecesarias.
-
+- Manage the reactivity of your application in a simple way.
+- **Implicit management**, which allows you to manage reactivity from the variables themselves, without the need to include unnecessary Wraps in your code.
+- **Efficiency mode** (Experimental), where the minimum renderings necessary to control reactivity will be performed, avoiding recurrent and unnecessary updates.
+ 
 ## Usage
 
-Vamos a ver los pasos detallados para el uso adecuado de Deep Observer.
+Let's take a look at the detailed steps for the proper use of Deep Observer.
 
 ---
 
-### Paso 1. Creación de Observers.
+### Step 1. Observers Creation.
 
-Lo primero será crear una clase que consideréis como `provider`, sin embargo, no tiene que tener ninguna extensión con `ChangeNotifier`.
+The first thing will be to create a class that you consider as `provider`, however, it does not have to have any extension with `ChangeNotifier`.
 
-Una vez creado, podemos declarar variables de tipo `DeepObservable`, estas contendrán las propiedades necesarias para la reactividad.
+Once created, we can declare variables of type `DeepObservable`, these will contain the necessary properties for the reactivity.
 
-Se debe indicar el tipo de dato a manejar, y el valor que tendrá inicialmente.
+We must indicate the type of data to handle, and the value it will have initially.
 
 ```dart
 class HomeController{
@@ -36,13 +35,14 @@ class HomeController{
 ```
 ---
 
-### Paso 2. Inyección de dependencias
+### Step 2. Dependency Injection
 
-Para usar tus clases `provider` con variables `DeepObservable` adecuadamente, se deberá realizar previamente una inyección de dependencias. Se pueden realizar de dos maneras diferentes.
+To use your `provider` classes with `DeepObservable` variables properly, dependency injection must be performed first. This can be done in two different ways.
 
-#### Método 1. Inyección global
+#### Method 1. Global injection
 
-Para realizar una inyeción de dependencias global, lo ideal será envolver `MaterialApp` con `GlobalInjector`, indicando en *registrations* las clases `provider` a utilizar. Estarán disponibles desde cualquier punto de la aplicación.
+To perform a global dependency injection, ideally wrap `MaterialApp` with `GlobalInjector`, indicating in *registrations* the `provider` classes to be used. They will be available from any point of the application.
+
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -67,9 +67,9 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-#### Método 2. Inyección local
+#### Method 2. Local injection
 
-Para realizar una inyeción de dependencias local, simplemente se envuelve cualquier Widget con `LocalInjector`, indicando en *registration* la clase `provider` a utilizar. Estará solamente para los Widget hijos de `LocalInjector`.
+To perform a local dependency injection, simply wrap any Widget with `LocalInjector`, indicating in *registration* the `provider` class to use. It will be only for child widgets of `LocalInjector`.
 
 ```dart
 class _MyRowCounterState extends State<MyRowCounter> {
@@ -98,23 +98,23 @@ class _MyRowCounterState extends State<MyRowCounter> {
 
 ---
 
-### Paso 3. Gestión de estados
+### Step 3. Status management
 
-En este punto se va a detallar como gestionar la reactividad con todo lo anterior establecido. Para ello podemos utilizar dos métodos.
+At this point we will detail how to manage the reactivity with all the above established. For this we can use two methods.
 
-#### Método 1. Gestión implícita (Deep gesture) **{NUEVO}**
+#### Method 1. Implicit management (Deep gesture) **{NEW}**
 
-Lo primero que debemos hacer es obtener la instancia de nuestra clase `provider`.
+The first thing we must do is to obtain the instance of our `provider` class.
 
-Podemos hacerlo con el método `context.deepGet<MyCounterProvider>()`. 
+We can do it with the `context.deepGet<MyCounterProvider>()` method. 
 
-En caso de haber realizado una inyección local de dependencias, podemos obtener la instancia del `builder` de `LocalInjector`. 
+In case we have performed a local dependency injection, we can get the `builder` instance from `LocalInjector`. 
 
-(TEST ESTO ?????)
+(TEST THIS ?????)
 
-Para la gestión implícita, basta con obtener el valor deseado del `DeepObservable` mediante `observable.reactiveValue(context)`.
+For implicit management, it is enough to obtain the desired value of the `DeepObservable` by `observable.reactiveValue(context)`.
 
-Con esto, el `context` pasado por parámetro se suscribirá automáticamente a los cambios del `DeepObservable`. En caso de haber algún cambio, o actualización, solo se renderizarán los Widgets que estén dentro del árbol generado por ese `context`.
+With this, the `context` passed by parameter will automatically subscribe to the changes of the `DeepObservable`. In case of any change, or update, only the Widgets that are inside the tree generated by that `context` will be rendered.
 
 ```dart
 
@@ -159,19 +159,19 @@ class _MyRowCounterState extends State<MyRowCounter> {
 
 ```
 
-#### Método 2. Gestión explícita (Gestión clásica) 
+#### Method 2. Explicit management (Classic management) 
 
-Al igual que en la gestión implícita, Lo primero que debemos hacer es obtener la instancia de nuestra clase `provider`.
+As in the implicit management, the first thing we must do is to obtain the instance of our `provider` class.
 
-Podemos hacerlo con el método `context.deepGet<MyCounterProvider>()`. 
+We can do it with the `context.deepGet<MyCounterProvider>()` method. 
 
-En caso de haber realizado una inyección local de dependencias, podemos obtener la instancia del `builder` de `LocalInjector`. Pero el Widget `DeepUpdatable` debe estar obligatoriamente dentro del árbol de `LocalInjector` en este caso.
+In case we have performed a local dependency injection, we can get the `builder` instance from `LocalInjector`. But the `DeepUpdatable` widget must necessarily be inside the `LocalInjector` tree in this case.
 
-(TEST ESTO ?????)
+(TEST THIS ?????)
 
-Para la gestión explícita, debemos de envolver los Widgets con `DeepUpdatable`. En *registrations* podemos indicar un número cualquiera de clases `provider`. El builder contendrá (N + 1) parámetros, siendo N el número de providers indicados en *registrations*. El primer parámetro será un `context`.
+For explicit management, we must wrap the widgets with `DeepUpdatable`. In *registrations* we can indicate any number of `provider` classes. The builder will contain (N + 1) parameters, being N the number of providers indicated in *registrations*. The first parameter will be a `context`.
 
-El `context` generado por `DeepUpdatable` se suscribirá automáticamente a los cambios de los `DeepObservable`. En caso de haber algún cambio, o actualización, solo se renderizará, los Widgets que estén dentro del árbol generado por ese `context`.
+The `context` generated by `DeepUpdatable` will automatically subscribe to changes in the `DeepObservable`. In case of any change, or update, only the Widgets that are inside the tree generated by that `context` will be rendered.
 
 ```dart
 class _MyRowCounterState extends State<MyRowCounter> {
@@ -226,7 +226,12 @@ class _MyRowCounterState extends State<MyRowCounter> {
 
 ---
 
-## ANEXO 1. Modo eficiencia (Experimental)
+## ANNEX 1. Efficiency mode (Experimental)
+
+An algorithm to improve the rendering efficiency of the listening `context` has been added to the library.
+
+To activate it, we must add an additional parameter called `efficiencyMode`, which must be set to `true`.
+
 ```dart
 class HomeController{
   HomeController();
@@ -238,36 +243,18 @@ class HomeController{
   DeepObservable<List<String>> observableList = DeepObservable(<String>[], efficiencyMode: true);
 }
 ```
+
+In case of updating any `DeepObservable` with these properties, what will be done internally will be to take the `context` that are listening, and update only the necessary ones to properly update the user interface, avoiding unnecessary rendering.
+
+IMPORTANT: For the reactivity to work with this property, you must not declare `Widgets` that use this type of reactivity with `const`.
+
+[<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="1000" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
+
+[<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="1000" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
+
 ## Gallery
 
-<div style="text-align: center">
-    <table>
-        <tr>
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/flutter-counter">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_counter.gif" width="200"/>
-                </a>
-            </td>            
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/flutter-infinite-list">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_infinite_list.gif" width="200"/>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/github-search">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_github_search.gif" width="200"/>
-                </a>
-            </td>
-            <td style="text-align: center">
-                <a href="https://bloclibrary.dev/tutorials/flutter-todos">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_todos.gif" width="200"/>
-                </a>
-            </td>
-        </tr>
-    </table>
-</div>
+[<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="1000" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
 
 ## Examples
 
