@@ -254,7 +254,7 @@ IMPORTANT: For the reactivity to work with this property, you must not declare `
 
 ## Gallery
 
-[<img src="https://raw.githubusercontent.com/rrousselGit/provider/master/resources/flutter_favorite.png" width="1000" />](https://flutter.dev/docs/development/packages-and-plugins/favorites)
+[<img src="https://raw.githubusercontent.com/carlosparra1998/deep_observer/refs/heads/main/assets/example.gif" width="500" />]
 
 ## Examples
 
