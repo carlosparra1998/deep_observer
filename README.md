@@ -258,8 +258,8 @@ IMPORTANT: For the reactivity to work with this property, you must not declare `
 
 ## Examples
 
-- [Multi Counter - Implicit Gesture](https://bloclibrary.dev/tutorials/flutter-counter) - an example of how to create a `CounterBloc` to implement the classic Flutter Counter app.
-- [Multi Counter - Explicit Gesture](https://github.com/felangel/bloc/tree/master/examples/flutter_form_validation) - an example of how to use the `bloc` and `flutter_bloc` packages to implement form validation.
+- [Multi Counter - Implicit Gesture](https://github.com/carlosparra1998/multi_counter_implicit_gesture) - Project where the DeepObservable state manager is tested implicitly.
+- [Multi Counter - Explicit Gesture](https://github.com/carlosparra1998/multi_counter_explicit_gesture) - Project where the DeepObservable state manager is tested explicitly.
 
 ## Maintainers
 
