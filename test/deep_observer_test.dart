@@ -1,4 +1,3 @@
-import 'package:deep_observer/deep_observer.dart';
 import 'package:test/test.dart';
 
 void main() {

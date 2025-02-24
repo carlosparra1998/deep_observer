@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 
 class MyRowCounter extends StatefulWidget {
   final int identifier;
-  final DeepObservable observable;
 
   const MyRowCounter({
     required this.identifier,
-    required this.observable,
     super.key,
   });
 
@@ -21,6 +19,7 @@ class _MyRowCounterState extends State<MyRowCounter> {
   @override
   Widget build(BuildContext context) {
     MyCounterProvider provider = context.deepGet<MyCounterProvider>();
+    DeepObservable<int> observable = provider.counters[widget.identifier];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -39,7 +38,7 @@ class _MyRowCounterState extends State<MyRowCounter> {
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
               ),
               Text(
-                '${widget.observable.reactiveValue(context)}',
+                '${observable.reactiveValue(context)}',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               ),
               Row(

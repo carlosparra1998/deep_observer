@@ -24,10 +24,7 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(provider.counters.length, (ix) {
-            return MyRowCounter(
-              identifier: ix,
-              observable: provider.counters[ix],
-            );
+            return MyRowCounter(identifier: ix);
           }),
         ),
       ),
